@@ -1,0 +1,22 @@
+.Cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border: none;
+    margin: 1px;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Lilita One', cursive;
+}
+
+.Cell:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+
+    transition: background-color 0.4s ease-in-out;
+}

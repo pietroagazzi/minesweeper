@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800;900&family=Lilita+One&display=swap');
 
+:root {
+    /* Colors */
+    --color-primary: #0f0f0f;
+    --color-secondary: #f7f7f2;
+    --color-tertiary: #ff6f61;
+}
+
 body {
     font-family: 'Gabarito', sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    color: #0f0f0f;
-    background-color: #f7f7f2;
+    color: var(--color-primary);
+    background-color: var(--color-secondary);
 }

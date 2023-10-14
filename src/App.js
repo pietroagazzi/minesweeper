@@ -1,9 +1,13 @@
 import "./App.css";
+import Header from "./components/Header";
+import Game from "./components/Game";
 
 function App() {
 	return (
-		<div className="App">
-		</div>
+		<main className="App">
+			<Header />
+			<Game width={10} height={10} mines={10} />
+		</main>
 	);
 }
 

@@ -1,0 +1,38 @@
+.Game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.Game__board {
+    display: flex;
+    flex-direction: column;
+}
+
+.Game__board-row {
+    display: flex;
+    flex-direction: row;
+}
+
+/* The first child of the first row should have rounded corners on the top left */
+.Game__board-row:first-child .Cell:first-child {
+    border-top-left-radius: 10px;
+}
+
+/* The last child of the first row should have rounded corners on the top right */
+.Game__board-row:first-child .Cell:last-child {
+    border-top-right-radius: 10px;
+}
+
+/* The first child of the last row should have rounded corners on the bottom left */
+.Game__board-row:last-child {
+    .Cell:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    .Cell:last-child {
+        border-bottom-right-radius: 10px;
+    }
+}
