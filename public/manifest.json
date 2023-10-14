@@ -1,0 +1,6 @@
+{
+	"short_name": "MineSweeper",
+	"name": "React MineSweeper",
+	"start_url": ".",
+	"display": "standalone"
+}
