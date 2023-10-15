@@ -15,10 +15,6 @@ class Game extends React.Component {
 		};
 	}
 
-	/**
-	 * Initializes the board
-	 * @returns {Array<Array<{value: number, isRevealed: boolean, isFlagged: boolean}>>} The board
-	 */
 	init(width, height, mines) {
 		let board = [];
 
@@ -107,22 +103,61 @@ class Game extends React.Component {
 		});
 	}
 
+	handleCellClick({ x, y }) {
+		const boardCopy = this.state.board.slice();
+		const cell = boardCopy[y][x];
+
+		if (cell.isRevealed || cell.isFlagged) {
+			return;
+		}
+
+		cell.isRevealed = true;
+
+		this.setState({ board: boardCopy });
+	}
+
+	handleCellFlag({ x, y }) {
+		const boardCopy = this.state.board.slice();
+		const cell = boardCopy[y][x];
+
+		if (cell.isRevealed) {
+			return;
+		}
+
+		cell.isFlagged = !cell.isFlagged;
+
+		this.setState({ board: boardCopy });
+	}
+
+	renderBoard(board) {
+		return (
+			<div className="Game__board">
+				{board.map((row, y) => (
+					<div key={y} className="Game__board-row">
+						{row.map((cell, x) => (
+							<Cell
+								key={x}
+								value={cell.value}
+								isRevealed={cell.isRevealed}
+								isFlagged={cell.isFlagged}
+								onLeftClick={() => this.handleCellClick({ x, y })}
+								onRightClick={e => {
+									e.preventDefault();
+									this.handleCellFlag({ x, y });
+								}}
+							/>
+						))}
+					</div>
+				))}
+			</div>
+		);
+	}
+
 	render() {
 		return (
 			<div className="Game">
 				<div className="Game__board">
-					{this.state.board.map((row, y) => (
-						<div className="Game__board-row" key={y}>
-							{row.map((cell, x) => (
-								<Cell
-									key={x}
-									value={cell.value}
-									isRevealed={cell.isRevealed}
-									isFlagged={cell.isFlagged}
-								/>
-							))}
-						</div>
-					))}
+					{this.renderBoard(this.state.board)}
 				</div>
 			</div>
 		);

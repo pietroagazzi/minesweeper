@@ -1,34 +1,54 @@
 import "./style.css";
+import React from "react";
 
-export default function Cell({ value, isRevealed, isFlagged, onClick }) {
-	let display = null;
-	let className = "Cell";
-
-	if (isRevealed) {
-		if (value === -1) {
-			display = "💣";
-			className += " Cell--mine";
-		} else if (value === 0) {
-			display = null;
-			className += " Cell--revealed";
-		} else {
-			display = value;
-			className += " Cell--revealed";
+class Cell extends React.Component {
+	get display() {
+		if (this.props.isFlagged) {
+			return "🚩";
 		}
-	} else if (isFlagged) {
-		display = "🚩";
-		className += " Cell--flagged";
-	} else {
-		display = null;
-		className += " Cell--hidden";
+
+		if (this.props.isRevealed) {
+			if (this.props.value === -1) {
+				return "💣";
+			}
+
+			if (this.props.value === 0) {
+				return null;
+			}
+
+			return this.props.value;
+		}
+
+		return null;
 	}
 
-	return (
-		<button
-			className={className}
-			onClick={onClick}
-		>
-			{display}
-		</button>
-	);
+	get className() {
+		if (this.props.isRevealed) {
+			if (this.props.value === -1) {
+				return "Cell Cell--bomb";
+			}
+
+			return "Cell Cell--revealed";
+		}
+
+		if (this.props.isFlagged) {
+			return "Cell Cell--flagged";
+		}
+
+		return "Cell";
+	}
+
+	render() {
+		return (
+			<button
+				className={this.className}
+				onClick={this.props.onLeftClick}
+				onContextMenu={this.props.onRightClick}
+			>
+				{this.display}
+			</button>
+		);
+	}
 }
+
+export default Cell;
