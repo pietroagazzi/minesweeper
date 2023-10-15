@@ -1,5 +1,5 @@
 import "./style.css";
-import Cell from "./Cell";
+import Cell from "../Cell";
 import React from "react";
 
 class Game extends React.Component {
