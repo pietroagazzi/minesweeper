@@ -94,5 +94,7 @@ describe("Game", () => {
 		const adjacentCells = Game.getAdjacentCells(board, 1, 1);
 
 		expect(adjacentCells).toHaveLength(8);
+		expect(adjacentCells[0].x).toBe(0);
+		expect(adjacentCells[0].y).toBe(0);
 	});
 });

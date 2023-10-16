@@ -3,8 +3,7 @@ import Cell, { CellValue } from "./Cell";
 class Game {
 	/** @type {Cell[][]} */
 	board = null;
-	isGameOver = false;
-	isGameWon = false;
+	gameOver = false;
 
 	/**
 	 * @param width {number}
@@ -114,7 +113,7 @@ class Game {
 	 * @param board {Cell[][]} The board to get the adjacent cells from.
 	 * @param x {number} The x coordinate of the cell.
 	 * @param y {number} The y coordinate of the cell.
-	 * @returns {Cell[]} An array of adjacent cells.
+	 * @returns {{value: number, isRevealed: boolean, isFlagged: boolean, x: number, y: number}[]} An array of adjacent cells.
 	 */
 	static getAdjacentCells(board, x, y) {
 		const adjacentCells = [];
@@ -136,6 +135,78 @@ class Game {
 		}
 
 		return adjacentCells;
+	}
+
+	revealAllMines() {
+		this.board
+			.flat()
+			.filter(cell => cell.isMine)
+			.forEach(cell => {
+				cell.isRevealed = true;
+			});
+	}
+
+	revealCell(x, y) {
+		const cell = this.board[y][x];
+
+		if (cell.isRevealed || cell.isFlagged) {
+			return;
+		}
+
+		if (cell.isMine) {
+			this.gameOver = true;
+			return;
+		}
+
+		this.revealEmptyCells(x, y);
+	}
+
+	revealEmptyCells(x, y) {
+		if (!this.board[y] || !this.board[y][x]) {
+			return;
+		}
+
+		const cell = this.board[y][x];
+
+		if (cell.isRevealed || cell.isFlagged) {
+			return;
+		}
+
+		cell.isRevealed = true;
+
+		if (cell.value !== CellValue.EMPTY) {
+			return;
+		}
+
+		const adjacentCells = Game.getAdjacentCells(this.board, x, y);
+
+		adjacentCells.forEach(cell => {
+			if (!cell.isRevealed) {
+				this.revealEmptyCells(cell.x, cell.y);
+			}
+		});
+	}
+
+	flagCell(x, y) {
+		const cell = this.board[y][x];
+
+		if (cell.isRevealed) {
+			return;
+		}
+
+		cell.isFlagged = !cell.isFlagged;
+
+		this.flags += cell.isFlagged ? -1 : 1;
+	}
+
+	isGameWon() {
+		return this.board
+			.flat()
+			.filter(cell => !cell.isRevealed).length === this.mines;
+	}
+
+	isGameOver() {
+		return this.gameOver;
 	}
 }
 
