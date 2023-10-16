@@ -190,7 +190,7 @@ class Game {
 	flagCell(x, y) {
 		const cell = this.board[y][x];
 
-		if (cell.isRevealed) {
+		if (cell.isRevealed || (this.flags < 1 && !cell.isFlagged)) {
 			return;
 		}
 

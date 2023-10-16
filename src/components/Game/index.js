@@ -72,22 +72,22 @@ class Game extends React.Component {
 
 	render() {
 		return (
-			<>
+			<div className="Game">
 				<div className="Game__info">
 					<span className="Game__info-flag-count"
 						  style={{ display: this.isGameEnded ? "none" : "block" }}>
-						<b>{this.state.flags}</b> flags left
+						<b>{this.state.game.flags}</b> flags left
 					</span>
 				</div>
 
 				<div
-					className={`Game__end ${this.isGameEnded ? "is-visible" : ""}`}>
-					<div className={`Game__end-content`}
+					className="Game__end" style={{ display: this.isGameEnded ? "block" : "none" }}>
+					<div className="Game__end--won"
 						 style={{ display: this.state.game.isGameWon() ? "block" : "none" }}>
 						<h1>You Won!</h1>
 					</div>
 
-					<div className={`Game__end-content`}
+					<div className="Game__end--lost"
 						 style={{ display: this.state.game.isGameOver() ? "block" : "none" }}>
 						<h1>Game Over</h1>
 					</div>
@@ -96,7 +96,7 @@ class Game extends React.Component {
 				</div>
 
 				{this.renderBoard()}
-			</>
+			</div>
 		);
 	}
 }

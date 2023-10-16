@@ -6,12 +6,13 @@
     height: 60px;
     border: none;
     border-radius: 5px;
-    margin: 1px;
+    margin: 2px;
     background-color: var(--color-primary);
     color: var(--color-secondary);
     font-size: 2rem;
     font-weight: bold;
     font-family: 'Lilita One', cursive;
+    user-select: none;
 }
 
 .Cell:hover {
@@ -26,4 +27,14 @@
     background-color: var(--color-secondary);
     color: var(--color-primary);
     border: none;
+}
+
+.Cell--mine {
+    background-color: var(--color-danger);
+    color: var(--color-secondary);
+}
+
+.Cell--flagged {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
 }

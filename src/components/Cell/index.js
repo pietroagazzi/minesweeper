@@ -42,7 +42,7 @@ class Cell extends React.Component {
 	get className() {
 		if (this.props.isRevealed) {
 			if (this.props.value === -1) {
-				return "Cell Cell--bomb";
+				return "Cell Cell--mine";
 			}
 
 			return "Cell Cell--revealed";
