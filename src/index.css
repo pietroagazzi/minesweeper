@@ -4,7 +4,9 @@
     /* Colors */
     --color-primary: #0f0f0f;
     --color-secondary: #f7f7f2;
-    --color-tertiary: #ff6f61;
+
+    --color-success: #00b894;
+    --color-danger: #ff6f61;
 }
 
 body {

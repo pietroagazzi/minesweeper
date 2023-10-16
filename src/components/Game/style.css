@@ -3,8 +3,8 @@
     flex-direction: column;
 }
 
-.Game__board.is-disabled {
-    opacity: 0.5;
+.Game__board--disabled {
+    pointer-events: none;
 }
 
 .Game__board-row {
@@ -86,4 +86,40 @@
             opacity: 0.8;
         }
     }
+}
+
+.Game__end {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Game__end.is-visible {
+    display: flex;
+}
+
+.Game__end-content {
+    display: none;
+}
+
+.Game__end-content.Game__end--won {
+    display: flex;
+    color: var(--color-success);
+}
+
+.Game__end-content.Game__end--lost {
+    display: flex;
+    color: var(--color-danger);
+}
+
+.Game__end button {
+    margin: 20px;
+    padding: 10px;
+    font-size: 1.5rem;
+    font-family: 'Gabarito', sans-serif;
+    font-weight: 900;
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    border: none;
+    border-radius: 10px;
 }

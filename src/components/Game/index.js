@@ -18,6 +18,16 @@ class Game extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		this.setState({
+			board: this.init(
+				this.state.width,
+				this.state.height,
+				this.state.mines
+			)
+		});
+	}
+
 	init(width, height, mines) {
 		let board = [];
 
@@ -103,37 +113,6 @@ class Game extends React.Component {
 		return boardCopy;
 	}
 
-	componentDidMount() {
-		this.setState({
-			board: this.init(
-				this.state.width,
-				this.state.height,
-				this.state.mines
-			)
-		});
-	}
-
-	handleCellClick({ x, y }) {
-		const cell = this.state.board[y][x];
-
-		if (cell.isRevealed || cell.isFlagged) {
-			return;
-		}
-
-		if (cell.value === -1) {
-			this.setState({ isGameOver: true });
-			return;
-		}
-
-		const board = this.revealAdjacentCells({ board: this.state.board, x, y });
-
-		if (this.isGameWon(board)) {
-			this.setState({ isGameWon: true });
-		}
-
-		this.setState({ board });
-	}
-
 	revealAdjacentCells({ board, x, y }) {
 		if (!board[y] || !board[y][x]) {
 			return board;
@@ -162,12 +141,25 @@ class Game extends React.Component {
 		return board;
 	}
 
-	isGameWon(board) {
-		return board.every(row => {
-			return row.every(cell => {
-				return cell.isRevealed || (cell.isFlagged && cell.value === -1);
-			});
-		});
+	handleCellClick({ x, y }) {
+		const cell = this.state.board[y][x];
+
+		if (cell.isRevealed || cell.isFlagged) {
+			return;
+		}
+
+		if (cell.value === -1) {
+			this.gameOver();
+			return;
+		}
+
+		const board = this.revealAdjacentCells({ board: this.state.board, x, y });
+
+		if (this.isGameWon(board)) {
+			this.setState({ isGameWon: true });
+		}
+
+		this.setState({ board });
 	}
 
 	handleCellFlag({ x, y }) {
@@ -184,30 +176,40 @@ class Game extends React.Component {
 
 		cell.isFlagged = !cell.isFlagged;
 
-		if (this.isGameWon(boardCopy)) {
-			this.setState({ isGameWon: true });
-		}
-
 		this.setState({ board: boardCopy, flags: this.state.flags + (cell.isFlagged ? -1 : 1) });
+	}
+
+	isGameWon(board) {
+		return board.every(row => {
+			return row.every(cell => {
+				return cell.isRevealed || (cell.isFlagged && cell.value === -1);
+			});
+		});
+	}
+
+	gameOver() {
+		this.setState({ isGameOver: true });
+		const boardCopy = this.state.board.slice();
+
+		boardCopy.forEach(row => {
+			row.forEach(cell => {
+				if (cell.value === -1) {
+					cell.isRevealed = true;
+				}
+			});
+		});
+
+		this.setState({ board: boardCopy });
+	}
+
+	get isGameEnded() {
+		return this.state.isGameOver || this.state.isGameWon;
 	}
 
 	renderBoard(board) {
 		return (
 			<>
-				<div className="Game__info">
-					<span className="Game__info-flag-count">
-						<b>{this.state.flags}</b> flags left
-					</span>
-				</div>
-
-				<div className={`Game__overlay ${this.state.isGameOver || this.state.isGameWon ? "is-visible" : ""}`}>
-					<div className="Game__overlay-content">
-						<h1>{this.state.isGameWon ? "You Won!" : "Game Over"}</h1>
-						<button onClick={() => window.location.reload()}>Play Again</button>
-					</div>
-				</div>
-
-				<div className={`Game__board ${this.state.isGameOver || this.state.isGameWon ? "is-disabled" : ""}`}>
+				<div className={`Game__board ${this.isGameEnded ? "Game__board--disabled" : ""}`}>
 					{board.map((row, y) => (
 						<div key={y} className="Game__board-row">
 							{row.map((cell, x) => (
@@ -233,6 +235,26 @@ class Game extends React.Component {
 	render() {
 		return (
 			<>
+				<div className="Game__info">
+					<span className="Game__info-flag-count"
+						  style={{ display: this.isGameEnded ? "none" : "block" }}>
+						<b>{this.state.flags}</b> flags left
+					</span>
+				</div>
+
+				<div
+					className={`Game__end ${this.isGameEnded ? "is-visible" : ""}`}>
+					<div className={`Game__end-content`} style={{ display: this.state.isGameWon ? "block" : "none" }}>
+						<h1>You Won!</h1>
+					</div>
+
+					<div className={`Game__end-content`} style={{ display: this.state.isGameOver ? "block" : "none" }}>
+						<h1>Game Over</h1>
+					</div>
+
+					<button onClick={() => window.location.reload()}>Play Again</button>
+				</div>
+
 				{this.renderBoard(this.state.board)}
 			</>
 		);
